@@ -1,7 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 from crew.tutor_crew import MAX_ROUNDS, TutorCrew, TutorError  # noqa: E402
 from memory.student_memory import StudentMemory  # noqa: E402

@@ -57,7 +57,7 @@ class TutorCrew:
             self.on_event(agent_name, f"finished -> handing work to {handoff}")
         return _callback
 
-    def _kickoff(self, build_crew: Callable[[], Crew], inputs: Dict, attempts: int = 2):
+    def _kickoff(self, build_crew: Callable[[], Crew], inputs: Dict, attempts: int = 4):
         last_error = None
         for attempt in range(1, attempts + 1):
             try:
@@ -68,12 +68,13 @@ class TutorCrew:
                     "Coordinator",
                     f"stage failed ({type(exc).__name__}), attempt {attempt}/{attempts}",
                 )
-                time.sleep(1)
+                if attempt < attempts:
+                    time.sleep(5 * attempt)   # wait 5s, 10s, 15s between tries
         raise TutorError(
             "The team could not finish this step. Please try again or rephrase. "
             f"(Last error: {last_error})"
         )
-
+    
     @staticmethod
     def _extract(task_output, model):
         parsed = getattr(task_output, "pydantic", None)
